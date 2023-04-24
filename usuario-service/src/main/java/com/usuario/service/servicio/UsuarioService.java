@@ -8,6 +8,7 @@ import com.usuario.service.modelos.Carro;
 import com.usuario.service.modelos.Moto;
 import com.usuario.service.repositorio.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,6 +31,9 @@ public class UsuarioService {
     @Autowired
     private MotoFeignClient motoFeignClient;
 
+    @Value("gateway.url")
+    private String gatewayUrl;
+
     public List<Usuario> obtenerUsuarios(){
 
         return ((List<Usuario>) usuarioRepository.findAll());
@@ -44,11 +48,11 @@ public class UsuarioService {
     }
 
     public List<Carro> getCarros(Long usuarioId){
-        List<Carro> carros = restTemplate.getForObject("http://localhost:8002/carro/usuario/" + usuarioId, List.class);
+        List<Carro> carros = restTemplate.getForObject(gatewayUrl + "/carro/usuario/" + usuarioId, List.class);
         return carros;
     }
     public List<Moto> getMotos(Long usuarioId){
-        List<Moto> motos = restTemplate.getForObject("http://localhost:8003/moto/usuario/" + usuarioId, List.class);
+        List<Moto> motos = restTemplate.getForObject(gatewayUrl + "/moto/usuario/" + usuarioId, List.class);
         return motos;
 
     }
