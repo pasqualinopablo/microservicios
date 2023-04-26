@@ -31,8 +31,15 @@ public class UsuarioService {
     @Autowired
     private MotoFeignClient motoFeignClient;
 
-    @Value("gateway.url")
+    @Value("${gateway.url}")
     private String gatewayUrl;
+
+    @Value("${moto-service.url}")
+    private String motoServiceUrl;
+
+    @Value("${carro-service.url}")
+    private String carroServiceUrl;
+
 
     public List<Usuario> obtenerUsuarios(){
 
@@ -48,11 +55,11 @@ public class UsuarioService {
     }
 
     public List<Carro> getCarros(Long usuarioId){
-        List<Carro> carros = restTemplate.getForObject(gatewayUrl + "/carro/usuario/" + usuarioId, List.class);
+        List<Carro> carros = restTemplate.getForObject(carroServiceUrl + "/carro/usuario/" + usuarioId, List.class);
         return carros;
     }
     public List<Moto> getMotos(Long usuarioId){
-        List<Moto> motos = restTemplate.getForObject(gatewayUrl + "/moto/usuario/" + usuarioId, List.class);
+        List<Moto> motos = restTemplate.getForObject(motoServiceUrl + "/moto/usuario/" + usuarioId, List.class);
         return motos;
 
     }

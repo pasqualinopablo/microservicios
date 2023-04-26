@@ -1,12 +1,13 @@
 package com.usuario.service.feignclients;
 
 import com.usuario.service.modelos.Moto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name= "moto-service", url="http://localhost:8080")
+@FeignClient(name= "moto-service")
 public interface MotoFeignClient {
 
     @PostMapping("/moto")

@@ -4,6 +4,7 @@ package com.usuario.service.controlador;
 import com.usuario.service.entidades.Usuario;
 import com.usuario.service.modelos.Carro;
 import com.usuario.service.modelos.Moto;
+
 import com.usuario.service.servicio.UsuarioService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Collections;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -97,7 +98,7 @@ public class UsuarioController {
         return ResponseEntity.created(location).body(nuevoCarro);
     }
 
-    @CircuitBreaker(name= "motosCB", fallbackMethod = "fallBackSaveMotos")
+    @CircuitBreaker(name= "motosCB", fallbackMethod = "fallBackSaveMoto")
     @PostMapping("/moto/{usuarioId}")
     public ResponseEntity<Moto> guardarMoto(@PathVariable("usuarioId") Long id, @RequestBody Moto moto){
         Usuario usuario = usuarioService.obtenerPorId(id);
@@ -120,22 +121,31 @@ public class UsuarioController {
     }
 
     private ResponseEntity<List<Carro>> fallBackGetCarros(@PathVariable("usuarioId") Long id, RuntimeException exception){
-        return new ResponseEntity("El usuario: "+ id +"tiene los carros en el taller", HttpStatus.BAD_REQUEST);
+        imprimirMensaje(exception.getMessage());
+        return new ResponseEntity("El usuario: "+ id +" tiene los carros en el taller", HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<List<Moto>> fallBackGetMotos(@PathVariable("usuarioId") Long id, RuntimeException exception){
-        return new ResponseEntity("El usuario: "+ id +"tiene las motos en el taller", HttpStatus.BAD_REQUEST);
+        imprimirMensaje(exception.getMessage());
+        return new ResponseEntity("El usuario: "+ id +" tiene las motos en el taller", HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<Carro> fallBackSaveCarro(@PathVariable("usuarioId") Long id, @RequestBody Carro carro, RuntimeException exception){
-        return new ResponseEntity("El usuario: "+ id +"no tiene dinero para los carros", HttpStatus.BAD_REQUEST);
+        imprimirMensaje(exception.getMessage());
+        return new ResponseEntity("El usuario: "+ id +" no tiene dinero para los carros", HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<Moto> fallBackSaveMoto(@PathVariable("usuarioId") Long id, @RequestBody Moto moto, RuntimeException exception){
-        return new ResponseEntity("El usuario: "+ id +"no tiene dinero para las motos", HttpStatus.BAD_REQUEST);
+        imprimirMensaje(exception.getMessage());
+        return new ResponseEntity("El usuario: "+ id +" no tiene dinero para las motos", HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<Map<String,Object>> fallBackGetTodos(@PathVariable("usuarioId") Long id, RuntimeException exception){
-        return new ResponseEntity("El usuario: "+ id +"tiene los vehiculos en el taller", HttpStatus.BAD_REQUEST);
+        imprimirMensaje(exception.getMessage());
+        return new ResponseEntity("El usuario: "+ id +" tiene los vehiculos en el taller", HttpStatus.BAD_REQUEST);
+    }
+
+    private void imprimirMensaje(String message) {
+        System.out.println(message);
     }
 }
