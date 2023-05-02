@@ -31,9 +31,6 @@ public class UsuarioService {
     @Autowired
     private MotoFeignClient motoFeignClient;
 
-    @Value("${gateway.url}")
-    private String gatewayUrl;
-
     @Value("${moto-service.url}")
     private String motoServiceUrl;
 

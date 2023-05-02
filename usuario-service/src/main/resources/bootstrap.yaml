@@ -5,12 +5,11 @@ spring:
     config:
       enabled: true
       uri: http://localhost:8081
+    compatibility-verifier:
+      enabled: false
 
 moto-service:
   url: http://moto-service
 
 carro-service:
   url: http://carro-service
-
-gateway:
-  url: http://localhost:8080
